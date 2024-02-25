@@ -1,29 +1,26 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
 Vagrant.configure("2") do |config|
-
-
   if Vagrant::Util::Platform::darwin?
     config.vm.box = "bento/ubuntu-20.04-arm64"
   else
     config.vm.box = "bento/ubuntu-20.04"
   end
 
-  config.vm.hostname = "completedev"
+  config.vm.hostname = "complete_dev"
   config.vm.network "private_network", type: "dhcp"
 
   if Vagrant::Util::Platform::darwin?
     config.vm.provider "parallels" do |prl|
       prl.memory = "1024"
-      prl.name = "completedev"
+      prl.name = "complete_dev"
       prl.update_guest_tools = true
     end
   else
     config.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
-      vb.name = "completedev"
+      vb.name = "complete_dev"
     end
   end
 
