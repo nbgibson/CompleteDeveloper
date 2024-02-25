@@ -8,19 +8,19 @@ Vagrant.configure("2") do |config|
     config.vm.box = "bento/ubuntu-20.04"
   end
 
-  config.vm.hostname = "complete_dev"
+  config.vm.hostname = "completedev"
   config.vm.network "private_network", type: "dhcp"
 
   if Vagrant::Util::Platform::darwin?
     config.vm.provider "parallels" do |prl|
       prl.memory = "1024"
-      prl.name = "complete_dev"
+      prl.name = "completedev"
       prl.update_guest_tools = true
     end
   else
     config.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
-      vb.name = "complete_dev"
+      vb.name = "completedev"
     end
   end
 
