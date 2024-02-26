@@ -4,5 +4,11 @@
     update_cache: yes
     state: present
 
+- name: Check if node is already installed
+  command: node -v
+  register: result
+  ignore_errors: true
+
 - name: Install NodeJS LTS
-  ansible.builtin.shell: curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs
+  shell: curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs
+  when: result is failed
