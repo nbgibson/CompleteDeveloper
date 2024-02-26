@@ -4,5 +4,5 @@
     update_cache: yes
     state: present
 
-- name: Execute shell command
+- name: Install NodeJS LTS
   ansible.builtin.shell: curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs
