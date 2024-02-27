@@ -1,0 +1,45 @@
+---
+- name: Get username of local user
+  become: false
+  local_action: command whoami
+  register: username_on_the_host
+
+- name: Ensure group 'sudo' exists
+  group:
+    name: sudo
+    state: present
+
+- name: Create the user
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    shell: /bin/bash
+
+- name: Set authorized key file from local user
+  authorized_key:
+    user: "{{ lookup('env', 'USER') }}"
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+- name: Copy over ssh keys
+  copy:
+    src: "{{ item }}"
+    dest: "/home/{{ lookup('env', 'USER') }}/.ssh"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0600'
+  with_fileglob:
+    - "{{ lookup('env', 'HOME') + '/.ssh/id_rsa*' }}"
+
+- name: Copy over git conf
+  copy:
+    src: "{{ lookup('env', 'HOME') + '/.gitconfig' }}"
+    dest: "/home/{{ lookup('env', 'USER') }}/.gitconfig"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0644'
+
+- name: Assign '{{ lookup('env', 'USER') }}' to the 'sudo' group
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    groups: sudo
+    append: true

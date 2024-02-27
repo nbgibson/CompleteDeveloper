@@ -2,6 +2,11 @@
 - name: Configure CompleteDev VM
   hosts: all
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   tasks:
-    - import_tasks: packages/packages.yml
+    - name: Install packages for node and ansible management
+      import_tasks: ./packages/packages.yml
+    - name: Create dev env user and copy over keys
+      import_tasks: ./users/usergen.yml
+    - name: Pull down Github code repo for dev
+      import_tasks: ./code/checkout_project.yml

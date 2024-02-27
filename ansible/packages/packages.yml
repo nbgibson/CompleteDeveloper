@@ -1,7 +1,13 @@
+---
 - name: Update and upgrade packages
   apt:
     name: "*"
-    update_cache: yes
+    update_cache: true
+    state: present
+
+- name: Install acl
+  apt:
+    name: acl
     state: present
 
 - name: Check if node is already installed

@@ -1,0 +1,23 @@
+---
+- name: Add GH to known hosts
+  known_hosts:
+    name: "github.com"
+    key: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    path: "/home/{{ lookup('env', 'USER') }}/.ssh/known_hosts"
+    state: present
+
+- name: Pull in repo from GH
+  become: true
+  become_user: "{{ lookup('env', 'USER') }}"
+  git:
+    repo: git@github.com:nbgibson/CompleteDeveloper.git
+    dest: "/home/{{ lookup('env', 'USER') }}/repos/CompleteDeveloper"
+    key_file: "/home/{{ lookup('env', 'USER') }}/.ssh/id_rsa"
+
+- name: Recursively change ownership of a directory
+  file:
+    path: "/home/{{ lookup('env', 'USER') }}/repos"
+    state: directory
+    recurse: true
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
