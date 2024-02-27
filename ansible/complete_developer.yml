@@ -10,3 +10,5 @@
       import_tasks: ./users/usergen.yml
     - name: Pull down Github code repo for dev
       import_tasks: ./code/checkout_project.yml
+    - name: Install any needed NodeJS projects
+      import_tasks: ./code/install_node_projects.yml
