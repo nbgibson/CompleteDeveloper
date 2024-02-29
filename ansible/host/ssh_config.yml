@@ -1,0 +1,24 @@
+---
+# NOTE: Intended to be run from project root via 'ansible-playbook ansible/host/ssh_config.yml' after a vagrant workspace is created. Will not work as part of the vagrant ansible stack
+- name: Add vagrant ssh conf to localhost ssh conf
+  hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - set_fact:
+        vagrant_machine_ip: "{{ lookup('file', '../../vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory') | regex_search('\\d+\\.\\d+\\.\\d+\\.\\d+') }}"
+
+    - name: Ensure local ssh conf has the CompleteDev entry present and updated
+      ansible.builtin.blockinfile:
+        path: "{{ lookup('env', 'HOME') + '/.ssh/config' }}"
+        block: |
+          Host CompleteDev
+               HostName {{ vagrant_machine_ip }}
+               User {{ lookup('env', 'USER') }}
+               Port 22
+
+    - name: Purge old vagrant machine entries
+      known_hosts:
+        name: completedev
+        path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+        key: "completedev {{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        state: absent
