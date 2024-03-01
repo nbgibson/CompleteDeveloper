@@ -1,0 +1,3 @@
+#!/bin/sh
+(cd vagrant && vagrant up)
+ansible-playbook ansible/host/ssh_config.yml
