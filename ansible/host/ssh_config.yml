@@ -8,7 +8,7 @@
         vagrant_machine_ip: "{{ lookup('file', '../../vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory') | regex_search('\\d+\\.\\d+\\.\\d+\\.\\d+') }}"
     - set_fact:
         vagrant_machine_port: "{{ lookup('file', '../../vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory') | regex_search('(?<=port=)\\d+') }}"
-        
+
 
     - name: Ensure local ssh conf has the CompleteDev entry present and updated
       ansible.builtin.blockinfile:
@@ -22,6 +22,13 @@
     - name: Purge old vagrant machine entries
       known_hosts:
         name: completedev
+        path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+        key: "completedev {{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        state: absent
+
+    - name: Purge old vagrant machine entries
+      known_hosts:
+        name: CompleteDev
         path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
         key: "completedev {{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
         state: absent
