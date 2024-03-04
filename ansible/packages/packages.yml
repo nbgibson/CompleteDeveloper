@@ -10,6 +10,11 @@
     name: acl
     state: present
 
+- name: Install lynx
+  apt:
+    name: lynx
+    state: present
+
 - name: Check if node is already installed
   command: node -v
   register: result
