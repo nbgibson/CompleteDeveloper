@@ -9,26 +9,31 @@
     - set_fact:
         vagrant_machine_port: "{{ lookup('file', '../../vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory') | regex_search('(?<=port=)\\d+') }}"
 
+    - name: Get vagrant machine key short
+      shell: ssh-keyscan -t ssh-rsa completedev 2> /dev/null | cut -c 21-
+      register: vagrant_machine_key_short
 
-    - name: Ensure local ssh conf has the CompleteDev entry present and updated
+    - name: Get vagrant machine key long
+      shell: ssh-keyscan -t ssh-rsa completedev 2> /dev/null | cut -c 12-
+      register: vagrant_machine_key_long
+
+    - name: Ensure local ssh conf has the completedev entry present and updated
       ansible.builtin.blockinfile:
         path: "{{ lookup('env', 'HOME') + '/.ssh/config' }}"
         block: |
-          Host CompleteDev
+          Host completedev
                HostName {{ vagrant_machine_ip }}
                User {{ lookup('env', 'USER') }}
                Port {{ vagrant_machine_port }}
 
-    - name: Purge old completedev entries
-      known_hosts:
-        name: completedev
-        path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
-        key: "completedev {{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    - name: Remove old known_hosts entry
+      ansible.builtin.lineinfile:
+        path: "{{ lookup('env', 'HOME') + '/.ssh/known_hosts' }}"
+        search_string: "{{ vagrant_machine_key_short.stdout }}"
         state: absent
 
-    - name: Purge old CompleteDev entries
-      known_hosts:
-        name: CompleteDev
-        path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
-        key: "completedev {{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
-        state: absent
+    - name: Remove old known_hosts entry
+      ansible.builtin.lineinfile:
+        path: "{{ lookup('env', 'HOME') + '/.ssh/known_hosts' }}"
+        line: "{{ vagrant_machine_ip + vagrant_machine_key_long.stdout }}"
+        state: present
