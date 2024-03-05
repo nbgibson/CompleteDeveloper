@@ -1,0 +1,6 @@
+{
+  "extends": "@tsconfig/recommend/tsconfig.json",
+  "compilerOptions": {},
+  "include": [],
+  "exclude": []
+}
