@@ -1,5 +1,6 @@
 ---
 - name: Install packages based on package.json.
-  become: "{{ lookup('env', 'USER') }}"
+  become: yes
+  become_user: "{{ lookup('env', 'USER') }}"
   community.general.npm:
     path: "/home/{{ lookup('env', 'USER') }}/repos/CompleteDeveloper/code/sample-express"

@@ -19,14 +19,14 @@
                User {{ lookup('env', 'USER') }}
                Port {{ vagrant_machine_port }}
 
-    - name: Purge old vagrant machine entries
+    - name: Purge old completedev entries
       known_hosts:
         name: completedev
         path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
         key: "completedev {{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
         state: absent
 
-    - name: Purge old vagrant machine entries
+    - name: Purge old CompleteDev entries
       known_hosts:
         name: CompleteDev
         path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
