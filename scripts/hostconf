@@ -1,0 +1,2 @@
+#!/bin/sh
+ansible-playbook ansible/host/ssh_config.yml
