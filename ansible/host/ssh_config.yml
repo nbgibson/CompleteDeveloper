@@ -32,7 +32,7 @@
         search_string: "{{ vagrant_machine_key_short.stdout }}"
         state: absent
 
-    - name: Remove old known_hosts entry
+    - name: Add new known_hosts entry
       ansible.builtin.lineinfile:
         path: "{{ lookup('env', 'HOME') + '/.ssh/known_hosts' }}"
         line: "{{ vagrant_machine_ip + vagrant_machine_key_long.stdout }}"
