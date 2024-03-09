@@ -1,6 +1,12 @@
 ---
-- name: Install packages based on package.json.
+- name: Install packages based on package.json for sample-express.
   become: yes
   become_user: "{{ lookup('env', 'USER') }}"
   community.general.npm:
     path: "/home/{{ lookup('env', 'USER') }}/repos/CompleteDeveloper/code/sample-express"
+
+- name: Install packages based on package.json for sample-next.
+  become: yes
+  become_user: "{{ lookup('env', 'USER') }}"
+  community.general.npm:
+    path: "/home/{{ lookup('env', 'USER') }}/repos/CompleteDeveloper/code/sample-next/my-app"
