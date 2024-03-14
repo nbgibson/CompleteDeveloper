@@ -9,4 +9,4 @@
   become: yes
   become_user: "{{ lookup('env', 'USER') }}"
   community.general.npm:
-    path: "/home/{{ lookup('env', 'USER') }}/repos/CompleteDeveloper/code/sample-next/my-app"
+    path: "/home/{{ lookup('env', 'USER') }}/repos/CompleteDeveloper/code/sample-next/refactored-app"
