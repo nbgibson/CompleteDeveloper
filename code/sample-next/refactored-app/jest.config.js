@@ -1,5 +1,3 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-};
+const nextJest = require("next/jest"); const createJestConfig = nextJest({});
+
+module.exports = createJestConfig(nextJest({}));
