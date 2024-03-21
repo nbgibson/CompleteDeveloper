@@ -1,0 +1,36 @@
+---
+version: "3.0"
+services:
+  application:
+    container_name: foodfinder-application
+    image: node:lts-alpine
+    user: ${MY_USER}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./code:/home/node/code
+    working_dir: /home/node/code/foodfinder-application
+    depends_on:
+      - backend
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERCAL=100
+      - npm_config_cache=/tmp
+      #- npm_config_cache=/home/node/code/foodfinder-application/.npm
+    tty: true
+    command: "npm run dev"
+  backend:
+    container_name: foodfinder-backend
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      DB_NAME: foodfinder
+      MONGO_INITDB_DATABASE: foodfinder
+    ports:
+      - 27017:27017
+    volumes:
+      - "./.docker/foodfinder-backend/seed-mongodb.js:/docker-entrypoint-initdb.d/seed-mongodb.js"
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
