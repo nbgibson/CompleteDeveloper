@@ -17,7 +17,6 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERCAL=100
       - npm_config_cache=/tmp
-      #- npm_config_cache=/home/node/code/foodfinder-application/.npm
     tty: true
     command: "npm run dev"
   backend:
