@@ -7,11 +7,13 @@ import dbConnect from "middleware/db-connect";
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
+import { getToken } from "next-auth/jwt";
+
 const server = new ApolloServer<BaseContext>({ resolvers, typeDefs });
 
 const handler = startServerAndCreateNextHandler(server, {
-  context: async () => {
-    const token = {};
+  context: async (req: NextApiRequest) => {
+    const token = await getToken({ req });
     return { token };
   },
 });
